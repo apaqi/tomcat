@@ -664,6 +664,7 @@ public class Catalina {
         }
 
         if (await) {
+            // 阻塞等待8005端口的SHUTDOWN命令，接收到SHUTDOWN命令后将继续执行stop()方法以停止Tomcat
             await();
             stop();
         }
@@ -699,6 +700,7 @@ public class Catalina {
         try {
             Server s = getServer();
             LifecycleState state = s.getState();
+            // 当前state处于[STOPPING_PREP,DESTROYED]之中，表示正常STOP或已经STOP了。
             if (LifecycleState.STOPPING_PREP.compareTo(state) <= 0
                     && LifecycleState.DESTROYED.compareTo(state) >= 0) {
                 // Nothing to do. stop() was already called

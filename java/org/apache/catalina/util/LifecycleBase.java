@@ -127,15 +127,20 @@ public abstract class LifecycleBase implements Lifecycle {
 
     @Override
     public final synchronized void init() throws LifecycleException {
+        // 组件初始化时state的状态应该是NEW，如果不是NEW则抛出LifecycleException
         if (!state.equals(LifecycleState.NEW)) {
             invalidTransition(Lifecycle.BEFORE_INIT_EVENT);
         }
 
         try {
+            // 将组件状态改为INITIALIZING，触发事件
             setStateInternal(LifecycleState.INITIALIZING, null, false);
+            // 组件内部初始化逻辑，可能会调用子组件初始化逻辑
             initInternal();
+            // 将组件状态改为INITIALIZED，触发事件
             setStateInternal(LifecycleState.INITIALIZED, null, false);
         } catch (Throwable t) {
+            // 如果上面抛出任何异常都会讲组件状态改为FAILED
             handleSubClassException(t, "lifecycleBase.initFail", toString());
         }
     }
