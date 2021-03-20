@@ -39,5 +39,7 @@ package javax.servlet;
  */
 @Deprecated
 public interface SingleThreadModel {
+    //如果没实现此接口，所有的请求共用一个servlet实例
+    //如果实现此接口，每个请求单独一个servlet实例
     // No methods
 }
